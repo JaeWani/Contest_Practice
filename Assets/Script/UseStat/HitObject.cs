@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class HitObject : StatObejct
 {
-    protected void Hit(float Damage)
+    protected void Hit(GameObject obj)
     {
-        HP -= Damage;
+        if(obj != null){
+        PlayerBullet bullet = obj.GetComponent<PlayerBullet>();
+        float dmg = bullet.BulletDamage;
+        HP -= dmg;
+        }
     }
 }

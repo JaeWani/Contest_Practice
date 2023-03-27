@@ -21,6 +21,12 @@ public class PlayerBullet : MonoBehaviour
     {
         transform.Translate(MoveDirection * BulletSpeed * Time.deltaTime);
     }
+    private void OnTriggerEnter2D(Collider2D other) {
+        if(other.CompareTag("Enemy")){
+            _Destroy();
+        }
+    }
+
     void _Destroy()
     {
         Destroy(gameObject);
