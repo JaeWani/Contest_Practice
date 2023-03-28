@@ -9,18 +9,25 @@ public class Player : HitObject
     public float PlayerSpeed = 3;
 
     public float BulletSpeed = 8;
+    [Header ("연료,내구도")]
+    public float Fuel;
+    private float CurChargeTime = 0;
+    public float FuelChargeTime;
+    public float Durability;
 
     [Header ("총알 프리펩")]
     [SerializeField] List<GameObject> BulletPrefabs = new List<GameObject>();
     Rigidbody2D _RB;
 
 
-    private void Awake() 
-    {
+    private void Awake() {
         Damage = 5;
         HP = 100;
         AttackDelay = 0.15f;
         PlayerAttack += _BasicAttack;
+
+        Fuel = 100;
+        Durability = 100;
     }
 
     void Start()
@@ -31,6 +38,11 @@ public class Player : HitObject
     {
         _Move();
         _Attack();
+        _SetValue();
+        _CheatKey();
+        _ChargeFuel();
+    }
+    void _CheatKey(){
         if(Input.GetKeyDown(KeyCode.F1))
             PlayerAttack += _TripleAttack;
         if(Input.GetKeyDown(KeyCode.F2))
@@ -38,8 +50,11 @@ public class Player : HitObject
         if(Input.GetKeyDown(KeyCode.F3)){
             PlayerAttack -= _QuadrupleAttack;
             PlayerAttack -= _TripleAttack;
-        }
+        }         
+        if(Input.GetKeyDown(KeyCode.F4))
+            Fuel += 10;
     }
+
     Vector2 MoveVec;
     void _Move()
     {
@@ -56,12 +71,14 @@ public class Player : HitObject
             return;
         }
         else {
+            if(Fuel >= 0.1f)
             PlayerAttack();
             time = 0;
         }
     }
     void _BasicAttack()
     {
+        Fuel -= 0.1f;
         PlayerBullet bullet = Instantiate(BulletPrefabs[0], transform.position,Quaternion.identity).GetComponent<PlayerBullet>();
         bullet.MoveDirection = new Vector2(0,1);
         bullet.BulletSpeed = BulletSpeed;
@@ -69,6 +86,7 @@ public class Player : HitObject
     }
     void _TripleAttack()
     {
+        Fuel -= 0.4f;
         PlayerBullet bullet1 = Instantiate(BulletPrefabs[0],transform.position,Quaternion.Euler(0,0, 10)).GetComponent<PlayerBullet>();
         PlayerBullet bullet2 = Instantiate(BulletPrefabs[0],transform.position,Quaternion.Euler(0,0,-10)).GetComponent<PlayerBullet>();
 
@@ -83,6 +101,7 @@ public class Player : HitObject
     }
     void _QuadrupleAttack()
     {
+        Fuel -= 0.5f;
         PlayerBullet bullet1 = Instantiate(BulletPrefabs[0],transform.position,Quaternion.Euler(0,0, 20)).GetComponent<PlayerBullet>();
         PlayerBullet bullet2 = Instantiate(BulletPrefabs[0],transform.position,Quaternion.Euler(0,0,-20)).GetComponent<PlayerBullet>();
 
@@ -94,5 +113,22 @@ public class Player : HitObject
 
         bullet1.BulletDamage = Damage;
         bullet2.BulletDamage = Damage;
+    }
+    void _ChargeFuel(){
+        if(CurChargeTime < FuelChargeTime){
+            CurChargeTime += Time.deltaTime;
+            return;
+        }
+        else{
+            Fuel += 30;
+            CurChargeTime = 0;
+        }
+    }
+
+    void _SetValue(){
+        if(Fuel > 100)
+            Fuel = 100;
+        if(Durability > 100)
+            Durability = 100;
     }
 }   
