@@ -144,4 +144,10 @@ public class Player : HitObject
         else if(other.CompareTag("EnemyBullet")){
         }
     }
+
+    protected override void Hit(GameObject obj)
+    {
+        base.Hit(obj);
+        CameraShake.ShakeCamera(0.3f,0.2f);
+    }
 }   

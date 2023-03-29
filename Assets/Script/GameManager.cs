@@ -34,6 +34,8 @@ public class GameManager : MonoBehaviour
     [SerializeField]Slider BossHPBar;
     [SerializeField]Text ScoreText;
     [SerializeField]Text MonsterCountText;
+    [SerializeField]Text BossText;
+    [SerializeField]Image BossImage;
     [Header ("아이템 프리펩")]
     [SerializeField]List<GameObject> ItemPrefabs = new List<GameObject>();
     private void Awake() {
@@ -44,12 +46,14 @@ public class GameManager : MonoBehaviour
     void Start(){
         PlayerObject = GameObject.Find("Player");
         CurPlayer = PlayerObject.GetComponent<Player>();
+       
     }
 
     void Update(){
         SpawnLogic();
         UISet();
         ScoreUp();
+        BossFight();
     }
     void SpawnLogic(){
         if(IsBoss == false){
@@ -94,6 +98,61 @@ public class GameManager : MonoBehaviour
             MonsterCountText.text = TargetMonsterCount - KillMonsterCount +"마리";
         }
     }
+    void BossFight(){
+        if(IsBoss == false && KillMonsterCount >= TargetMonsterCount){
+        IsBoss = true;
+        TextFadeInOut(BossText, 2);
+        ImageFadeInOut(BossImage,2);
+        StartCoroutine(BossSpawn());
+        }
+    }
+    IEnumerator BossSpawn(){
+        yield return new WaitForSeconds(5);
+        Debug.Log("스폰");
+    }
+    void TextFadeInOut(Text obj, int count){
+        StartCoroutine(Fade());
+        obj.gameObject.SetActive(true);
+        IEnumerator Fade(){
+            Color cur = obj.color;
+            Color c = new Color(cur.r,cur.g,cur.b,0);
+            for(int j = 0; j < count; j++){
+                for(int i = 0; i < 100; i++){
+                obj.color = c;
+                c.a += 0.01f;
+                yield return new WaitForSeconds(0.01f);
+                }
+                for(int i = 100; i > 0; i--){
+                obj.color = c;
+                c.a -= 0.01f;
+                yield return new WaitForSeconds(0.01f);
+                }
+            }
+            obj.gameObject.SetActive(false);
+        }
+    }
+    void ImageFadeInOut(Image obj, int count){
+        StartCoroutine(Fade());
+        obj.gameObject.SetActive(true);
+        IEnumerator Fade(){
+            Color cur = obj.color;
+            Color c = new Color(cur.r,cur.g,cur.b,0);
+            for(int j = 0; j < count; j++){
+                for(int i = 0; i < 100; i++){
+                obj.color = c;
+                c.a += 0.01f;
+                yield return new WaitForSeconds(0.01f);
+                }
+                for(int i = 100; i > 0; i--){
+                obj.color = c;
+                c.a -= 0.01f;
+                yield return new WaitForSeconds(0.01f);
+                }
+            }
+            obj.gameObject.SetActive(false);
+        }
+    }
+
     public static void SpawnItem(int index, Transform pos){
         instance._SpawnItem(index, pos);
     }
