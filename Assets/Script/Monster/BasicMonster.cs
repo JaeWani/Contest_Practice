@@ -16,4 +16,11 @@ public class BasicMonster : Monster
     private void Update() {
 
     }
+    protected override void Dead()
+    {
+        if(HP <= 0){
+            GameManager.instance.Score += 50;
+        }
+        base.Dead();
+    }
 }

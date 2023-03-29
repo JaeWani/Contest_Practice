@@ -5,6 +5,8 @@ using System;
 
 public class Player : HitObject
 {
+    public static Player instance;
+
     [Header ("이동범위 제한")]
     [SerializeField]private Vector2 _moveLimit;
     public Vector3 ClampVector(Vector3 pos){
@@ -21,10 +23,14 @@ public class Player : HitObject
 
     [Header ("총알 프리펩")]
     [SerializeField]List<GameObject> BulletPrefabs = new List<GameObject>();
-    public static int BulletLV = 1;
+    public int BulletLV = 1;
     Rigidbody2D _RB;
     
     private void Awake(){
+        instance = this;
+        if(instance != this)
+            Destroy(gameObject);
+
         Damage = 5;
         HP = 100;
         AttackDelay = 0.15f;

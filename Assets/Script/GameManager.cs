@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager instance;
+
     [Header ("플레이어")]
     [SerializeField]GameObject PlayerObject;
     [SerializeField]Player CurPlayer;
@@ -14,9 +16,24 @@ public class GameManager : MonoBehaviour
                     float CurSpawnTime;
     [SerializeField]public List<GameObject> MonsterList = new List<GameObject>();
 
+    [Header ("Score")]
+    public int Score = 0;
+    public List<int> ScoreIncrement = new List<int>();
+    [SerializeField]float GetScoreTime;
+                    float CurScoreTime;
+    [Header ("Stage")]
+    public int StageNum = 1;
+
+
     [Header ("UI")]
     [SerializeField]Slider FuelBar;
     [SerializeField]Slider DurabilityBar;
+    [SerializeField]Text ScoreText;
+    private void Awake() {
+        instance = this;  
+        if(instance != this)
+            Destroy(gameObject);  
+    }
     void Start(){
         PlayerObject = GameObject.Find("Player");
         CurPlayer = PlayerObject.GetComponent<Player>();
@@ -25,6 +42,7 @@ public class GameManager : MonoBehaviour
     void Update(){
         SpawnLogic();
         UISet();
+        ScoreUp();
     }
     void SpawnLogic(){
         if(CurSpawnTime < SpawnTime){
@@ -37,11 +55,24 @@ public class GameManager : MonoBehaviour
         CurSpawnTime = 0;      
         }
     }
+    void ScoreUp(){
+        if(CurScoreTime < GetScoreTime){
+            CurScoreTime += Time.deltaTime;
+            return;
+        }
+        else{
+            CurScoreTime = 0;
+            Score += ScoreIncrement[StageNum -1];
+        }
+    }
+
     void UISet(){
         float fuel = CurPlayer.Fuel;
         float durability = CurPlayer.Durability;
 
         FuelBar.value = fuel/100;
         DurabilityBar.value = durability/100;
+
+        ScoreText.text = Score + "점";
     }
 }

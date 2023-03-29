@@ -25,6 +25,7 @@ public class PlayerBullet : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.CompareTag("Enemy")){
+            PaticleManager.SpawnPaticle(0,transform);
             _Destroy();
         }
     }
