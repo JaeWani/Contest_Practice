@@ -15,11 +15,10 @@ public class Player : HitObject
     [Header ("플레이어 스탯")]
     public float PlayerSpeed = 3;
     public float BulletSpeed = 8;
-    [Header ("연료,내구도")]
+    [Header ("연료")]
     public float Fuel;
     private float CurChargeTime = 0;
     public float FuelChargeTime;
-    public float Durability;
 
     [Header ("총알 프리펩")]
     [SerializeField]List<GameObject> BulletPrefabs = new List<GameObject>();
@@ -37,7 +36,7 @@ public class Player : HitObject
         PlayerAttack += _BasicAttack;
 
         Fuel = 100;
-        Durability = 100;
+        HP = 100;
     }
     void Start(){
         _RB = GetComponent<Rigidbody2D>();
@@ -78,20 +77,19 @@ public class Player : HitObject
             return;
         }
         else {
-            if(Fuel >= 0.1f)
             PlayerAttack();
             time = 0;
         }
     }
     void _BasicAttack(){
-        Fuel -= 0.1f;
         PlayerBullet bullet = Instantiate(BulletPrefabs[BulletLV -1], transform.position,Quaternion.identity).GetComponent<PlayerBullet>();
         bullet.MoveDirection = new Vector2(0,1);
         bullet.BulletSpeed = BulletSpeed;
         bullet.BulletDamage = Damage;
     }
     void _TripleAttack(){
-        Fuel -= 0.4f;
+        if(Fuel > 0){
+        Fuel -= 0.5f;
         PlayerBullet bullet1 = Instantiate(BulletPrefabs[BulletLV -1],transform.position,Quaternion.Euler(0,0, 10)).GetComponent<PlayerBullet>();
         PlayerBullet bullet2 = Instantiate(BulletPrefabs[BulletLV -1],transform.position,Quaternion.Euler(0,0,-10)).GetComponent<PlayerBullet>();
 
@@ -103,8 +101,10 @@ public class Player : HitObject
 
         bullet1.BulletDamage = Damage;
         bullet2.BulletDamage = Damage;
+        }
     }
     void _QuadrupleAttack(){
+        if(Fuel > 0){
         Fuel -= 0.5f;
         PlayerBullet bullet1 = Instantiate(BulletPrefabs[BulletLV -1],transform.position,Quaternion.Euler(0,0, 20)).GetComponent<PlayerBullet>();
         PlayerBullet bullet2 = Instantiate(BulletPrefabs[BulletLV -1],transform.position,Quaternion.Euler(0,0,-20)).GetComponent<PlayerBullet>();
@@ -117,6 +117,7 @@ public class Player : HitObject
 
         bullet1.BulletDamage = Damage;
         bullet2.BulletDamage = Damage;
+        }
     }
     void _ChargeFuel(){
         if(CurChargeTime < FuelChargeTime){
@@ -132,7 +133,15 @@ public class Player : HitObject
     void _SetValue(){
         if(Fuel > 100)
             Fuel = 100;
-        if(Durability > 100)
-            Durability = 100;
+        if(HP > 100)
+            HP = 100;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other) {
+        if(other.CompareTag("Enemy")){
+            Hit(other.gameObject);
+        }
+        else if(other.CompareTag("EnemyBullet")){
+        }
     }
 }   

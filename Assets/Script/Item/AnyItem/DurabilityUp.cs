@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FuelUp : Item
+public class DurabilityUp : Item
 {
     protected override void Used(){
         base.Used();
-        Player.instance.Fuel += 100;
+        Player.instance.HP += 10;
         Destroy(gameObject);
     }
 }

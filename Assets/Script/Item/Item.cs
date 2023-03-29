@@ -8,9 +8,7 @@ public class Item : MonoBehaviour
         if(other.CompareTag("Player"))
         Used();
     }
-
     protected virtual void Used(){
         Debug.Log("Item Used!");
-        
     }
 }

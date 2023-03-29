@@ -13,4 +13,10 @@ public class Monster : HitObject
         base.BulletHit(obj);
         Dead();
     }
+    protected override void Dead()
+    {
+        base.Dead();
+        if(HP <= 0)
+        GameManager.instance.KillMonsterCount++;
+    }
 }
