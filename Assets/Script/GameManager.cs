@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]float SpawnTime;
                     float CurSpawnTime;
     [SerializeField]public List<GameObject> MonsterList = new List<GameObject>();
+    [SerializeField]public GameObject BossPrefabs;
 
     [Header ("Score")]
     public int Score = 0;
@@ -26,7 +27,7 @@ public class GameManager : MonoBehaviour
     public int KillMonsterCount = 0;
     public int TargetMonsterCount = 50;
     public bool IsBoss = false;
-
+    public GameObject BossObj;
 
     [Header ("UI")]
     [SerializeField]Slider FuelBar;
@@ -36,6 +37,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]Text MonsterCountText;
     [SerializeField]Text BossText;
     [SerializeField]Image BossImage;
+
     [Header ("아이템 프리펩")]
     [SerializeField]List<GameObject> ItemPrefabs = new List<GameObject>();
     private void Awake() {
@@ -89,6 +91,10 @@ public class GameManager : MonoBehaviour
         ScoreText.text = Score + "점";
 
         if(IsBoss == true){
+            if(BossObj != null){
+                StatObejct stat = BossObj.GetComponent<StatObejct>();
+                BossHPBar.value = stat.HP/stat.MaxHP;
+            }
             MonsterCountText.gameObject.SetActive(false);
             BossHPBar.gameObject.SetActive(true);
         }
@@ -108,7 +114,7 @@ public class GameManager : MonoBehaviour
     }
     IEnumerator BossSpawn(){
         yield return new WaitForSeconds(5);
-        Debug.Log("스폰");
+        Instantiate(BossPrefabs,new Vector2(-3.5f,3.5f),Quaternion.identity);
     }
     void TextFadeInOut(Text obj, int count){
         StartCoroutine(Fade());

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4774129137815114464}
   - component: {fileID: 1357284668231807487}
   m_Layer: 0
-  m_Name: Explosion
+  m_Name: Hit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -608,7 +608,7 @@ ParticleSystem:
     gravityModifier:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0
+      scalar: 1
       minScalar: 0
       maxCurve:
         serializedVersion: 2

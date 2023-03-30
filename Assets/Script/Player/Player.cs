@@ -15,6 +15,10 @@ public class Player : HitObject
     [Header ("플레이어 스탯")]
     public float PlayerSpeed = 3;
     public float BulletSpeed = 8;
+    [Header ("무적")]
+    public bool IsNoDie = false;
+    public GameObject NoDieObejct;
+    public float NoDieTime = 0;
     [Header ("연료")]
     public float Fuel;
     private float CurChargeTime = 0;
@@ -47,6 +51,7 @@ public class Player : HitObject
         _SetValue();
         _CheatKey();
         _ChargeFuel();
+        NoDie();
     }
     void _CheatKey(){
         if(Input.GetKeyDown(KeyCode.F1))
@@ -136,7 +141,18 @@ public class Player : HitObject
         if(HP > 100)
             HP = 100;
     }
+    void NoDie(){
+        if(NoDieTime > 0){
+            IsNoDie = true;
+            NoDieTime -= Time.deltaTime;
+            NoDieObejct.SetActive(true);
+        }
+        else{
+            NoDieObejct.SetActive(false);
+            IsNoDie = false;
+        }
 
+    }
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.CompareTag("Enemy")){
             Hit(other.gameObject);

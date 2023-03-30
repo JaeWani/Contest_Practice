@@ -5,6 +5,7 @@ using UnityEngine;
 public class StatObejct : MonoBehaviour
 {
    public float HP;
+   public float MaxHP;
    public float Damage;
    public float AttackDelay;
 }

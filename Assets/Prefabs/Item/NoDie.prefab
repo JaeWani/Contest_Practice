@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 7765157495234518490}
   - component: {fileID: 7765157495234518488}
   - component: {fileID: 7765157495234518489}
-  - component: {fileID: -6314550252088026195}
+  - component: {fileID: -5214739706277073404}
   m_Layer: 0
-  m_Name: DurabilityUp
+  m_Name: NoDie
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -77,7 +77,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0, g: 1, b: 0.08760595, a: 1}
+  m_Color: {r: 0, g: 0.4739051, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -134,7 +134,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &-6314550252088026195
+--- !u!114 &-5214739706277073404
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143,6 +143,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 7765157495234518492}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2425b3f08d887445b7c72feb5f4396f, type: 3}
+  m_Script: {fileID: 11500000, guid: 5a5c9e8dd295cc6429891fee6f4b5600, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
