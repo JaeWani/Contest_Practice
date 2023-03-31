@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4774129137815114464}
   - component: {fileID: 1357284668231807487}
   m_Layer: 0
-  m_Name: Explosion
+  m_Name: BIg Explosion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41,7 +41,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7351701922032091136}
   serializedVersion: 8
-  lengthInSec: 0.05
+  lengthInSec: 3
   simulationSpeed: 1
   stopAction: 2
   cullingMode: 0

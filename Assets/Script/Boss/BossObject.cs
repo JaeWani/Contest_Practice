@@ -5,6 +5,7 @@ using UnityEngine;
 public class BossObject : HitObject
 {
     public GameObject EnemyBullet;
+    bool IsNoDie = false;
 
     void Start(){
         GameManager.instance.BossObj = gameObject;
@@ -13,6 +14,7 @@ public class BossObject : HitObject
     }
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.CompareTag("PlayerBullet")){
+            if(IsNoDie == false)
             BulletHit(other.gameObject);
         }
     }
@@ -22,9 +24,18 @@ public class BossObject : HitObject
     }
     protected override void Dead()
     {
-        base.Dead();
-        if(HP <= 0)
+        if(HP <= 0){
         StopAllCoroutines();
+        StartCoroutine(DeadEffect());
+        }
+    }
+    IEnumerator DeadEffect(){
+        IsNoDie = true;
+        CameraShake.ShakeCamera(3,0.5f);
+        PaticleManager.SpawnPaticle(2,transform);
+        yield return new WaitForSeconds(3);
+        GameManager.StageEnd();
+        base.Dead();
     }
     IEnumerator BossPattern(){
         while(true){

@@ -37,6 +37,8 @@ public class GameManager : MonoBehaviour
     [SerializeField]Text MonsterCountText;
     [SerializeField]Text BossText;
     [SerializeField]Image BossImage;
+    [SerializeField]Image NextStageImage;
+    [SerializeField]Text NextStageText;
 
     [Header ("아이템 프리펩")]
     [SerializeField]List<GameObject> ItemPrefabs = new List<GameObject>();
@@ -50,7 +52,6 @@ public class GameManager : MonoBehaviour
         CurPlayer = PlayerObject.GetComponent<Player>();
        
     }
-
     void Update(){
         SpawnLogic();
         UISet();
@@ -158,11 +159,22 @@ public class GameManager : MonoBehaviour
             obj.gameObject.SetActive(false);
         }
     }
-
     public static void SpawnItem(int index, Transform pos){
         instance._SpawnItem(index, pos);
     }
     public void _SpawnItem(int index, Transform pos){
         Instantiate(ItemPrefabs[index], pos.position,Quaternion.identity);
+    }
+    public static void StageEnd(){
+        instance.StartCoroutine(instance._StageEnd());
+    }
+    public IEnumerator _StageEnd(){
+        yield return new WaitForSeconds(1);
+        KillMonsterCount = 0;
+        TextFadeInOut(NextStageText,2);
+        NextStageText.text = StageNum + "스테이지";
+        ImageFadeInOut(NextStageImage,2);
+        yield return new WaitForSeconds(6);
+        IsBoss = false;
     }
 }
