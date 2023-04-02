@@ -45,6 +45,8 @@ public class GameManager : MonoBehaviour
 
     [Header ("아이템 프리펩")]
     [SerializeField]List<GameObject> ItemPrefabs = new List<GameObject>();
+    [Header ("저장 데이터")]
+    public static JsonDataStruct Data = new JsonDataStruct();
     private void Awake() {
         instance = this;  
         if(instance != this)
@@ -59,6 +61,9 @@ public class GameManager : MonoBehaviour
         UISet();
         ScoreUp();
         BossFight();
+    }
+    void GameOver(){
+        Data.score = Score;
     }
     void SpawnLogic(){
         if(IsBoss == false){
