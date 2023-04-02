@@ -140,4 +140,4 @@ MonoBehaviour:
   MaxHP: 0
   Damage: 10
   AttackDelay: 0
-  EnemyBullet: {fileID: 5514860638408316149, guid: f49c8672fe0ca5e40b52549fd8c74b19, type: 3}
+  EnemyBullet: {fileID: 5514860638408316149, guid: 2bde772846c217e46a7ef4069b223d68, type: 3}

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Monster : HitObject
 {
+    public static int A;
     protected virtual void RandomItemSpawn(){
         int rand = Random.Range(1,21);
         switch(rand){           
@@ -21,15 +22,20 @@ public class Monster : HitObject
     }
     protected override void BulletHit(GameObject obj){
         base.BulletHit(obj);
-        Dead();
     }
     protected override void Dead()
     {
         base.Dead();
+        Debug.Log("ASD");
+        if(GameManager.instance.IsBoss == true)
+            Destroy(gameObject);
         if(HP <= 0){
         GameManager.instance.KillMonsterCount++;
         RandomItemSpawn();
         PaticleManager.SpawnPaticle(1,transform);
         }
+    }
+    protected override void _Destroy(){
+        Destroy(gameObject);
     }
 }

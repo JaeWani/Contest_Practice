@@ -6,7 +6,6 @@ public class BossObject : HitObject
 {
     public GameObject EnemyBullet;
     bool IsNoDie = false;
-
     void Start(){
         GameManager.instance.BossObj = gameObject;
         StartCoroutine(BossPattern());
@@ -25,6 +24,7 @@ public class BossObject : HitObject
     protected override void Dead()
     {
         if(HP <= 0){
+        GameManager.instance.StageNum++;
         StopAllCoroutines();
         StartCoroutine(DeadEffect());
         }

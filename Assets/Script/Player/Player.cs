@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 
 public class Player : HitObject
@@ -19,6 +20,9 @@ public class Player : HitObject
     public bool IsNoDie = false;
     public GameObject NoDieObejct;
     public float NoDieTime = 0;
+    [Header ("스킬")]
+    public bool CanBoom = true;
+    public bool CanHeal = true;
     [Header ("연료")]
     public float Fuel;
     private float CurChargeTime = 0;
@@ -27,6 +31,9 @@ public class Player : HitObject
     [Header ("총알 프리펩")]
     [SerializeField]List<GameObject> BulletPrefabs = new List<GameObject>();
     public int BulletLV = 1;
+    [Header ("UI")]
+    [SerializeField] Image BoomSkill;
+    [SerializeField] Image HealSkill;
     Rigidbody2D _RB;
     
     private void Awake(){
@@ -52,6 +59,8 @@ public class Player : HitObject
         _CheatKey();
         _ChargeFuel();
         NoDie();
+        Boom();
+        Heal();
     }
     void _CheatKey(){
         if(Input.GetKeyDown(KeyCode.F1))
@@ -69,7 +78,7 @@ public class Player : HitObject
     Vector2 MoveVec;
     void _Move(){
         transform.localPosition = ClampVector(transform.localPosition);
-
+       
         MoveVec.x = Input.GetAxisRaw("Horizontal") * PlayerSpeed;
         MoveVec.y = Input.GetAxisRaw("Vertical") * PlayerSpeed;
         _RB.velocity = MoveVec;
@@ -134,7 +143,6 @@ public class Player : HitObject
             CurChargeTime = 0;
         }
     }
-
     void _SetValue(){
         if(Fuel > 100)
             Fuel = 100;
@@ -151,19 +159,69 @@ public class Player : HitObject
             NoDieObejct.SetActive(false);
             IsNoDie = false;
         }
-
+    }
+    void Boom(){
+        if(Input.GetKeyDown(KeyCode.G)){
+            if(CanBoom == true){
+            SkillBoom.UseSkill();
+            StartCoroutine(BoomCoolTime(30));
+            }
+        }
+    }
+    IEnumerator BoomCoolTime(float Cool){
+        CanBoom = false;
+        float cool = 0;
+        while(cool < Cool){
+            cool += Time.deltaTime;
+            BoomSkill.fillAmount = cool / Cool;
+            yield return new WaitForFixedUpdate();
+        }
+        CanBoom = true;
+    }
+    void Heal(){
+        if(Input.GetKeyDown(KeyCode.F)){
+            if(CanHeal == true){
+            HP += 50;
+            StartCoroutine(HealCoolTime(10));
+            }
+        }
+    }
+    IEnumerator HealCoolTime(float Cool){
+        CanHeal = false;
+        float cool = 0;
+        while(cool < Cool){
+            cool += Time.deltaTime;
+            HealSkill.fillAmount = cool/Cool;
+            yield return new WaitForFixedUpdate();
+        }
+        CanHeal = true;
     }
     private void OnTriggerEnter2D(Collider2D other) {
+        if(IsNoDie == false){
         if(other.CompareTag("Enemy")){
             Hit(other.gameObject);
         }
         else if(other.CompareTag("EnemyBullet")){
+            EnemyBulletHit(other.gameObject);
+        }
+        else if(other.CompareTag("EnemyLazer")){
+            LazerHit(other.gameObject);
+        }
         }
     }
-
     protected override void Hit(GameObject obj)
     {
         base.Hit(obj);
+        CameraShake.ShakeCamera(0.3f,0.2f);
+    }
+    protected override void EnemyBulletHit(GameObject obj)
+    {
+        base.EnemyBulletHit(obj);
+        CameraShake.ShakeCamera(0.3f,0.2f);
+    }
+    protected override void LazerHit(GameObject obj)
+    {
+        base.LazerHit(obj);
         CameraShake.ShakeCamera(0.3f,0.2f);
     }
 }   

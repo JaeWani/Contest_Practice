@@ -7,6 +7,9 @@ public class EnemyBullet : MonoBehaviour
     public float BulletDamage;
     public float BulletSpeed;
     public Vector3 MoveDirection = new Vector2(0,1);
+    private void Start() {
+        Invoke("_Destroy", 3);
+    }
     void Update(){
         _BulletMove();
     }

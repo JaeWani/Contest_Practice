@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class BasicMonster : Monster
 {
-
     Rigidbody2D _RB;
     [SerializeField] GameObject bullet;
     [SerializeField] float MoveSpeed;
@@ -16,9 +15,12 @@ public class BasicMonster : Monster
         //밑으로 이동하도록 velocity 설정
         _RB.velocity = new Vector2(0,-1 * MoveSpeed);
         Target = GameObject.Find("Player");
+        Invoke("_Destroy",4);
     }
     private void Update() {
         fire();
+        Tracking();
+        Dead();
     }
     protected override void Dead()
     {
@@ -34,12 +36,16 @@ public class BasicMonster : Monster
         }
         else{
             curfireTime = 0;
-            TrackingBullet();
+            SpawnBullet();
         }
     }
-    void TrackingBullet(){
+    void SpawnBullet(){
+        var obj = Instantiate(bullet,transform.position,transform.rotation).GetComponent<EnemyBullet>();
+        obj.MoveDirection = new Vector3(0,-1,0);
+    }
+    void Tracking(){
         var vec = Target.transform.position - transform.position;
         var deg = Mathf.Atan2(vec.y,vec.x) * Mathf.Rad2Deg;
-        Instantiate(bullet,transform.position,Quaternion.Euler(0,0,deg + 90));
+        transform.rotation = Quaternion.Euler(0,0,deg + 90);
     }
 }

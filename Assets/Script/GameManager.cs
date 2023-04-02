@@ -6,15 +6,18 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-
+   
     [Header ("플레이어")]
     [SerializeField]GameObject PlayerObject;
     [SerializeField]Player CurPlayer;
 
     [Header ("스폰 로직 관련")]
     [SerializeField]float SpawnTime;
-                    float CurSpawnTime;
+                    float CurSpawnTime = 0;
+    [SerializeField]float LazerSpawnTime;
+                    float CurLazerTime = 0;
     [SerializeField]public List<GameObject> MonsterList = new List<GameObject>();
+    [SerializeField] List<Transform> LazerPosition = new List<Transform>();
     [SerializeField]public GameObject BossPrefabs;
 
     [Header ("Score")]
@@ -50,7 +53,6 @@ public class GameManager : MonoBehaviour
     void Start(){
         PlayerObject = GameObject.Find("Player");
         CurPlayer = PlayerObject.GetComponent<Player>();
-       
     }
     void Update(){
         SpawnLogic();
@@ -66,9 +68,23 @@ public class GameManager : MonoBehaviour
         }
         else{
         Vector2 vec = new Vector2(Random.Range(-8,2), 6);
-        Instantiate(MonsterList[0],vec,Quaternion.identity);      
         CurSpawnTime = 0;      
+        var mob = Instantiate(MonsterList[0],vec,Quaternion.identity).GetComponent<StatObejct>();  
+        mob.HP = 50 * StageNum;
         }
+        }
+    }
+    void LazerSpawnLogic(){
+        if(IsBoss == false){
+            if(CurLazerTime < LazerSpawnTime){
+                CurLazerTime += Time.deltaTime;
+                return;
+            }
+            else{
+                CurLazerTime = 0;
+                var mob = Instantiate(MonsterList[1],LazerPosition[Random.Range(0,LazerPosition.Count)].position,Quaternion.identity).GetComponent<StatObejct>();  
+                mob.HP = 150 * StageNum; 
+            }
         }
     }
     void ScoreUp(){

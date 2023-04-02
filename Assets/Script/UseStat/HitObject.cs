@@ -11,6 +11,16 @@ public class HitObject : StatObejct
         HP -= dmg;
         }
     }
+    protected virtual void EnemyBulletHit(GameObject obj){
+        EnemyBullet bullet = obj.GetComponent<EnemyBullet>();
+        float dmg = bullet.BulletDamage;
+        HP -= dmg;
+    }
+    protected virtual void LazerHit(GameObject obj){
+        LazerScript lazer = obj.GetComponent<LazerScript>();
+        float dmg = lazer.LazerDamage;
+        HP -= dmg;
+    }
     protected virtual void Hit(GameObject obj){
         if(obj != null){
             StatObejct stat = obj.GetComponent<StatObejct>();
@@ -20,6 +30,9 @@ public class HitObject : StatObejct
     }
     protected virtual void Dead(){
         if(HP<=0)
+        Destroy(gameObject);
+    }
+    protected virtual void _Destroy(){
         Destroy(gameObject);
     }
 }
