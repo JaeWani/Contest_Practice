@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -42,6 +43,10 @@ public class GameManager : MonoBehaviour
     [SerializeField]Image BossImage;
     [SerializeField]Image NextStageImage;
     [SerializeField]Text NextStageText;
+    [SerializeField]Image GameOverPanel;
+    [SerializeField] InputField nameInput;
+    [SerializeField] Text GameOverScore;
+    [SerializeField] Button GoTitle;
 
     [Header ("아이템 프리펩")]
     [SerializeField]List<GameObject> ItemPrefabs = new List<GameObject>();
@@ -55,15 +60,27 @@ public class GameManager : MonoBehaviour
     void Start(){
         PlayerObject = GameObject.Find("Player");
         CurPlayer = PlayerObject.GetComponent<Player>();
+        GameOverPanel.gameObject.SetActive(false);
+        GoTitle.onClick.AddListener(() => {
+            if(!string.IsNullOrWhiteSpace(nameInput.text)){
+                SaveManager.instance.DataSave(nameInput.text);
+                SceneManager.LoadScene(0); // 타이틀 씬으로 이동
+            }});
     }
     void Update(){
         SpawnLogic();
         UISet();
         ScoreUp();
         BossFight();
+        GameOver();
     }
     void GameOver(){
+        if(CurPlayer.HP <= 0){
+        Time.timeScale = 0;
         Data.score = Score;
+        GameOverPanel.gameObject.SetActive(true);
+        GameOverScore.text = "당신의 점수는" + Score + "점 입니다.";
+        }
     }
     void SpawnLogic(){
         if(IsBoss == false){
